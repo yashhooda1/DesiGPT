@@ -19,3 +19,19 @@ DesiGPT is an AI-powered chatbot that embodies the soul of Bharat. It answers qu
 ```bash
 git clone https://github.com/yourusername/desigpt.git
 cd desigpt
+```
+
+### 2. Setup the backend
+```bash
+cd backend
+pip install -r requirements.txt
+cp .env.example .env  # Add your OpenAI API Key
+uvicorn main:app --reload
+```
+
+### 3. Run the frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
