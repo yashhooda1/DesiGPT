@@ -7,7 +7,7 @@ import os
 import dotenv
 
 dotenv.load_dotenv()
-os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+os.environ["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"] = os.getenv("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")
 
 app = FastAPI()
 
