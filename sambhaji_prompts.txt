@@ -1,0 +1,21 @@
+# DesiGPT Prompt Templates - Sambhaji Maharaj 🇮🇳
+
+These prompts can be added to the frontend or used to test your LangChain app.
+
+## 🔥 Heroic Prompts
+
+1. "संभाजी महाराज कौन थे?"
+2. "औरंगज़ेब और संभाजी महाराज के बीच क्या हुआ था?"
+3. "संभाजी महाराज की शहादत की कहानी बताइए।"
+4. "संभाजी महाराज ने मुगलों से कैसे लड़ाई लड़ी?"
+5. "शिवाजी और संभाजी महाराज में क्या समानताएं थीं?"
+6. "संपूर्ण संभाजी महाराज का जीवन परिचय हिंदी में दीजिए।"
+7. "Why is Sambhaji Maharaj considered a martyr?"
+8. "Explain how Sambhaji Maharaj was tortured by Aurangzeb."
+9. "Who betrayed Sambhaji Maharaj?"
+10. "What was Sambhaji Maharaj’s biggest victory?"
+
+## 🧠 Pro Tip:
+Use these prompts to test retrieval accuracy once you upload Hindi/English biographies of Sambhaji Maharaj into your /data folder.
+
+JAI BHAVANI 🚩 | JAI SHIVAJI | JAI SAMBHAJI MAHARAJ

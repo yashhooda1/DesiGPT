@@ -1,43 +1,34 @@
-# 🇮🇳 DesiGPT – AI Chatbot on Indian Culture & History
+# DesiGPT 🇮🇳
 
-DesiGPT is an AI-powered chatbot that embodies the soul of Bharat. It answers questions about Indian history, languages, festivals, and culture with warmth and respect. Built with FastAPI, Agno AGI, and OpenAI GPT-4.
+DesiGPT is an AI-powered chatbot built using LangChain that answers questions related to Indian culture, history, spirituality, and scriptures in Hindi.
 
-## ✨ Features
-- Understands Indian traditions, festivals, culture, languages
-- Speaks with Desi tone (Hindi/Sanskrit phrases included)
-- Powered by Agno + GPT-4 + DuckDuckGo Tools
-- React frontend chat interface
-- Easy to deploy and extend
+## 🌟 Features
 
-## 📦 Tech Stack
-- **Backend**: Python, FastAPI, Agno, OpenAI, DuckDuckGo API
-- **Frontend**: React + Tailwind CSS
-- **Deployment**: Vercel (frontend), Render or HuggingFace Spaces (backend)
+- Built with LangChain + OpenAI + FAISS
+- Prioritizes Hindi as the primary language
+- Knowledge base includes Bhagavad Gita, Ramcharitmanas, and NCERT Hindi texts
+- RAG (Retrieval-Augmented Generation) pipeline for accurate answers
 
-## 🚀 Quickstart
-### 1. Clone the repo
-```bash
-git clone https://github.com/yourusername/desigpt.git
-cd desigpt
+## 🚀 Setup
+
+1. Clone the repo
+2. Install requirements:
+    ```bash
+    pip install -r requirements.txt
+    ```
+3. Add your OpenAI API key to `.env`
+4. Run:
+    ```bash
+    python desigpt.py
+    ```
+
+## 🔮 Sample Query
+
+```
+भगवद गीता में अर्जुन को क्या सिखाया गया?
 ```
 
-### 2. Setup the backend
-```bash
-cd backend
-pip install -r requirements.txt
-cp .env.example .env  # Add your OpenAI API Key
-uvicorn main:app --reload
-```
+## 🙏 Credits
 
-### 3. Run the frontend
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-## 🧠 About
-Created by Yash Hooda under Hoodaagents to preserve, promote, and interact with Indian culture in the AI age. 🇮🇳
-
-## 📜 License
-MIT License
+Made by Yash Hooda  
+JAI HIND 🇮🇳 | HAR HAR MAHADEV 🕉️
