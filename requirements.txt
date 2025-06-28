@@ -1,5 +1,6 @@
-langchain
-openai
-faiss-cpu
+fastapi
+uvicorn
 python-dotenv
-tiktoken
+openai
+langchain
+faiss-cpu
