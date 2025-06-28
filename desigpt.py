@@ -9,19 +9,25 @@ from langchain.chains import RetrievalQA
 
 load_dotenv()
 
-# Step 1: Load and split Hindi PDFs
+# Step 1–3: Prepare RAG pipeline
 loader = PyPDFLoader("data/bhagavad_gita_hindi.pdf")
 pages = loader.load()
+
 splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
 docs = splitter.split_documents(pages)
 
-# Step 2: Create embeddings
 embeddings = OpenAIEmbeddings()
 db = FAISS.from_documents(docs, embeddings)
 
-# Step 3: Build Retrieval-based QA
 retriever = db.as_retriever()
 qa_chain = RetrievalQA.from_chain_type(llm=OpenAI(), retriever=retriever)
+
+# ✅ Step 4: Wrap as function
+def run_desigpt_logic(query: str) -> str:
+    try:
+        return qa_chain.run(query)
+    except Exception as e:
+        return f"Error: {str(e)}"
 
 # Step 4: Ask a question
 #query = "भगवद गीता में अर्जुन को क्या सिखाया गया?"
