@@ -24,6 +24,6 @@ retriever = db.as_retriever()
 qa_chain = RetrievalQA.from_chain_type(llm=OpenAI(), retriever=retriever)
 
 # Step 4: Ask a question
-query = "भगवद गीता में अर्जुन को क्या सिखाया गया?"
-response = qa_chain.run(query)
-print(response)
+#query = "भगवद गीता में अर्जुन को क्या सिखाया गया?"
+#response = qa_chain.run(query)
+#print(response)
