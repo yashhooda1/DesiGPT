@@ -1,0 +1,40 @@
+{
+  "nodes": [
+    {
+      "id": "1",
+      "type": "Input",
+      "name": "User Query",
+      "data": {"prompt": ""}
+    },
+    {
+      "id": "2",
+      "type": "LanguageDetector",
+      "name": "Detect Lang",
+      "data": {}
+    },
+    {
+      "id": "3",
+      "type": "Retriever",
+      "name": "Vector DB",
+      "data": {"directory": "./db"}
+    },
+    {
+      "id": "4",
+      "type": "LLM",
+      "name": "GPT-4 with Desi Personality",
+      "data": {"temperature": 0.3, "systemPrompt": "You are DesiGPT..."}
+    },
+    {
+      "id": "5",
+      "type": "Output",
+      "name": "Bot Reply",
+      "data": {}
+    }
+  ],
+  "edges": [
+    {"source": "1", "target": "2"},
+    {"source": "2", "target": "3"},
+    {"source": "3", "target": "4"},
+    {"source": "4", "target": "5"}
+  ]
+}
