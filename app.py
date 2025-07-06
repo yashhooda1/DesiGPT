@@ -1,27 +1,45 @@
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
-from desigpt import run_desigpt_logic  # 👈 import your logic here
+from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.vectorstores import Chroma
+from langchain.chains import ConversationalRetrievalChain
+from langchain.chat_models import ChatOpenAI
+from langdetect import detect
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 app = FastAPI()
+origins = ["*"]
+app.add_middleware(CORSMiddleware, allow_origins=origins, allow_methods=["*"], allow_headers=["*"])
 
-@app.get("/")
-def read_root():
-    return {"message": "DesiGPT API is live!"}
+embeddings = OpenAIEmbeddings()
+vectordb = Chroma(persist_directory="db", embedding_function=embeddings)
+llm = ChatOpenAI(temperature=0.3, model_name="gpt-4")
+qa_chain = ConversationalRetrievalChain.from_llm(llm, vectordb.as_retriever())
+
+PERSONALITY_PROMPT = """
+You are DesiGPT, a warm and respectful AI knowledgeable in Indian history, culture, languages.
+"""
+
+class Query(BaseModel):
+    question: str
+    chat_history: list = []
 
 @app.post("/ask")
-async def ask(request: Request):
-    try:
-        body = await request.json()
-        question = body.get("question", "")
-        if not question:
-            return JSONResponse(status_code=400, content={"error": "Missing 'question'"})
+async def ask_question(query: Query):
+    lang = detect(query.question)
+    if lang == "hi":
+        personality = PERSONALITY_PROMPT + "\nPlease answer in Hindi."
+    elif lang == "sa":
+        personality = PERSONALITY_PROMPT + "\nPlease answer in Sanskrit."
+    else:
+        personality = PERSONALITY_PROMPT + "\nPlease answer in English."
 
-        answer = run_desigpt_logic(question)
-        return JSONResponse(content={"answer": answer})
-    except Exception as e:
-        return JSONResponse(status_code=500, content={"error": str(e)})
-
-# Optional if running locally
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
+    response = qa_chain({
+        "question": personality + "\n\n" + query.question,
+        "chat_history": query.chat_history
+    })
+    return {"answer": response["answer"]}
