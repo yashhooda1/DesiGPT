@@ -1,35 +1,49 @@
-import os
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.vectorstores import Chroma
+from langchain.chains import ConversationalRetrievalChain
+from langchain.chat_models import ChatOpenAI
+from langdetect import detect
 from dotenv import load_dotenv
-from langchain.document_loaders import PyPDFLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.embeddings import OpenAIEmbeddings
-from langchain.vectorstores import FAISS
-from langchain.llms import OpenAI
-from langchain.chains import RetrievalQA
+import os
 
 load_dotenv()
 
-# Step 1–3: Prepare RAG pipeline
-loader = PyPDFLoader("data/bhagavad_gita_hindi.pdf")
-pages = loader.load()
-
-splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
-docs = splitter.split_documents(pages)
-
+# Load embedding & vector DB
 embeddings = OpenAIEmbeddings()
-db = FAISS.from_documents(docs, embeddings)
+vectordb = Chroma(persist_directory="db", embedding_function=embeddings)
 
-retriever = db.as_retriever()
-qa_chain = RetrievalQA.from_chain_type(llm=OpenAI(), retriever=retriever)
+# Build QA chain with retrieval
+llm = ChatOpenAI(temperature=0.3, model_name="gpt-4")
+qa_chain = ConversationalRetrievalChain.from_llm(llm, vectordb.as_retriever())
 
-# ✅ Step 4: Wrap as function
-def run_desigpt_logic(query: str) -> str:
-    try:
-        return qa_chain.run(query)
-    except Exception as e:
-        return f"Error: {str(e)}"
+# Warm respectful personality template
+PERSONALITY_PROMPT = """
+You are DesiGPT, an AI expert on Indian culture, history, spirituality, and languages.
+Speak warmly, with cultural respect, using Hindi or Sanskrit if the user prefers.
+"""
 
-# Step 4: Ask a question
-#query = "भगवद गीता में अर्जुन को क्या सिखाया गया?"
-#response = qa_chain.run(query)
-#print(response)
+def handle_query(user_query, chat_history=[]):
+    lang = detect(user_query)
+    if lang == "hi":
+        personality = PERSONALITY_PROMPT + "\nRespond in Hindi."
+    elif lang == "sa":
+        personality = PERSONALITY_PROMPT + "\nRespond in Sanskrit."
+    else:
+        personality = PERSONALITY_PROMPT + "\nRespond in English."
+
+    # Inject personality into context
+    response = qa_chain({
+        "question": personality + "\n\n" + user_query,
+        "chat_history": chat_history
+    })
+    return response["answer"]
+
+if __name__ == "__main__":
+    history = []
+    while True:
+        user_input = input("Ask DesiGPT: ")
+        if user_input.lower() in ["exit", "quit"]:
+            break
+        answer = handle_query(user_input, history)
+        print("\nDesiGPT:", answer)
+        history.append((user_input, answer))
